@@ -25,7 +25,6 @@ app.use(passport.session());
 
 // MongoDB Connection
 mongoose
-  .set('strictQuery', true) // Best practice for MongoDB
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -51,7 +50,7 @@ passport.use(
       callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
     },
     (accessToken, refreshToken, profile, done) => {
-      // Here, handle user data and save to DB if necessary
+      // Handle user data and save to DB if necessary
       return done(null, profile);
     }
   )
@@ -66,7 +65,7 @@ passport.use(
       callbackURL: `${process.env.BASE_URL}/auth/github/callback`,
     },
     (accessToken, refreshToken, profile, done) => {
-      // Here, handle user data and save to DB if necessary
+      // Handle user data and save to DB if necessary
       return done(null, profile);
     }
   )
@@ -107,6 +106,11 @@ app.use('/api/task', taskRoutes);
 // User Routes
 const userRoutes = require('./routes/api/users'); // Ensure this file exists
 app.use('/api/users', userRoutes);
+
+// Default Route
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
 
 // Start the server
 app.listen(port, () => {
